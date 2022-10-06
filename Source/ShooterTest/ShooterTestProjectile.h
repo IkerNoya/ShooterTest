@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Niagara/Classes/NiagaraSystem.h"
 #include "ShooterTestProjectile.generated.h"
 
 class USphereComponent;
@@ -24,7 +25,7 @@ class AShooterTestProjectile : public AActor
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
-	UParticleSystem* ProjectileImpact;
+	UNiagaraSystem* ProjectileImpact;
 	
 	AShooterTestProjectile();
 

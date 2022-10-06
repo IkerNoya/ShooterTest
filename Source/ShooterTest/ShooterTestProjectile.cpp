@@ -3,6 +3,7 @@
 #include "ShooterTestProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 AShooterTestProjectile::AShooterTestProjectile() 
@@ -12,7 +13,6 @@ AShooterTestProjectile::AShooterTestProjectile()
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
 	CollisionComp->OnComponentHit.AddDynamic(this, &AShooterTestProjectile::OnHit);		// set up a notification for when this component hits something blocking
-
 	// Players can't walk on it
 	CollisionComp->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	CollisionComp->CanCharacterStepUpOn = ECB_No;
@@ -34,8 +34,9 @@ AShooterTestProjectile::AShooterTestProjectile()
 
 void AShooterTestProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if ((OtherActor != nullptr) && (OtherActor != this))
+	if ((OtherActor != nullptr) && (OtherActor != this) && ProjectileImpact)
 	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ProjectileImpact, Hit.ImpactPoint, FRotationMatrix::MakeFromX(Hit.ImpactNormal).Rotator());
 		Destroy();
 	}
 }
