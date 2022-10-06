@@ -2,7 +2,7 @@
 
 #include "ShooterTestGameMode.h"
 #include "ShooterTestHUD.h"
-#include "ShooterTestCharacter.h"
+#include "ShooterTest/Character/ShooterTestCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AShooterTestGameMode::AShooterTestGameMode()

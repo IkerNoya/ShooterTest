@@ -23,6 +23,9 @@ class AShooterTestProjectile : public AActor
 	UProjectileMovementComponent* ProjectileMovement;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
+	UParticleSystem* ProjectileImpact;
+	
 	AShooterTestProjectile();
 
 	/** called when projectile hits something */
