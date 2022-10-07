@@ -5,6 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "ShooterTest/ShooterTestProjectile.h"
+#include "ShooterTest/Character/CharacterBase.h"
 
 
 // Sets default values
@@ -54,7 +55,7 @@ void AWeaponBase::Fire()
 	}
 }
 
-void AWeaponBase::SetUser(AShooterTestCharacter* User)
+void AWeaponBase::SetUser(ACharacterBase* User)
 {
 	Character = User;
 	if(Character)

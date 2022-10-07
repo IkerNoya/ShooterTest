@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ShooterTest/Character/ShooterTestCharacter.h"
+#include "ShooterTest/Character/CharacterBase.h"
+#include "ShooterTest/Character/CharacterBase.h"
 #include "WeaponBase.generated.h"
 
 UCLASS()
@@ -13,7 +14,7 @@ class SHOOTERTEST_API AWeaponBase : public AActor
 	GENERATED_BODY()
 
 	UPROPERTY()
-	AShooterTestCharacter* Character;
+	ACharacterBase* Character;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -24,7 +25,7 @@ protected:
 	TSubclassOf<class AShooterTestProjectile> ProjectileClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Settings")
 	USoundBase* FireSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Gameplay")
 	FVector GunOffset;
 		
 public:
@@ -38,5 +39,5 @@ public:
 	void Fire();
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void SetUser(AShooterTestCharacter* User);
+	void SetUser(ACharacterBase* User);
 };

@@ -34,7 +34,7 @@ AShooterTestProjectile::AShooterTestProjectile()
 
 void AShooterTestProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if ((OtherActor != nullptr) && (OtherActor != this))
+	if ((OtherActor != nullptr) && (OtherActor != this) && OtherActor!=GetInstigator())
 	{
 		if(OtherActor->CanBeDamaged() && GetInstigator())
 		{
