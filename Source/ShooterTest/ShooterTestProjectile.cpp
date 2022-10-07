@@ -34,9 +34,16 @@ AShooterTestProjectile::AShooterTestProjectile()
 
 void AShooterTestProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if ((OtherActor != nullptr) && (OtherActor != this) && ProjectileImpact)
+	if ((OtherActor != nullptr) && (OtherActor != this))
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ProjectileImpact, Hit.ImpactPoint, FRotationMatrix::MakeFromX(Hit.ImpactNormal).Rotator());
+		if(OtherActor->CanBeDamaged() && GetInstigator())
+		{
+			OtherActor->TakeDamage(Damage, FDamageEvent(), GetInstigatorController(), GetInstigator());
+		}
+		if(ProjectileImpact)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ProjectileImpact, Hit.ImpactPoint, FRotationMatrix::MakeFromX(Hit.ImpactNormal).Rotator());
+		}
 		Destroy();
 	}
 }

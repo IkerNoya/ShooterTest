@@ -14,16 +14,17 @@ UCLASS(config=Game)
 class AShooterTestProjectile : public AActor
 {
 	GENERATED_BODY()
-
-	/** Sphere collision component */
+	
+protected:
 	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
 	USphereComponent* CollisionComp;
 
-	/** Projectile movement component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileMovement;
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Settings")
+	float Damage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
 	UNiagaraSystem* ProjectileImpact;
 	

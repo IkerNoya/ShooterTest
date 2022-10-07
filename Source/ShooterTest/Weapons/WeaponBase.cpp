@@ -43,7 +43,7 @@ void AWeaponBase::Fire()
 			FActorSpawnParameters ActorSpawnParams;
 			ActorSpawnParams.SpawnCollisionHandlingOverride =
 				ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
+			ActorSpawnParams.Instigator = Character;
 			World->SpawnActor<AShooterTestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 		}
 	}
