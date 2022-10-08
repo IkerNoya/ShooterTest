@@ -29,8 +29,8 @@ void UHealthComponent::TakeDamage(float Damage)
 	CurrentHealth -= Damage;
 	if(CurrentHealth <= 0)
 	{
+		CurrentHealth = 0;
 		Death();
-		return;
 	}
 	OnDamageTaken.Broadcast(OldValue, CurrentHealth);
 }

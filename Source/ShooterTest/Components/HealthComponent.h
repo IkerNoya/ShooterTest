@@ -45,4 +45,6 @@ public:
 	void Heal(float Amount);
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Health")
 	FORCEINLINE float GetHealth() const { return CurrentHealth; }
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Health")
+	FORCEINLINE float GetNormalizedHealth() const { return CurrentHealth / 100.f; };
 };
