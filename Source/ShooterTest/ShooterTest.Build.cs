@@ -9,7 +9,8 @@ public class ShooterTest : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", 
-			"Engine", "InputCore", "HeadMountedDisplay" , "Niagara", "NiagaraCore"});
+			"Engine", "InputCore", "HeadMountedDisplay" , "Niagara", "NiagaraCore",
+			"AIModule", "GameplayTasks"});
 		
 		PrivateDependencyModuleNames.AddRange(new string[]{"Niagara"});
 	}
