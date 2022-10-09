@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "ShooterTest/ShooterTestProjectile.h"
 #include "ShooterTest/Character/CharacterBase.h"
+#include "ShooterTest/Character/PlayerCharacter.h"
 
 
 // Sets default values
@@ -26,11 +27,12 @@ AWeaponBase::AWeaponBase()
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AWeaponBase::Fire()
 {
+	if(!bCanAttack) return;
+	
 	if (ProjectileClass != nullptr)
 	{
 		UWorld* const World = GetWorld();
@@ -48,11 +50,33 @@ void AWeaponBase::Fire()
 			World->SpawnActor<AShooterTestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 		}
 	}
+	if (FireAnimation != nullptr)
+	{
+		if(auto* Player = Cast<APlayerCharacter>(Character))
+		{
+			UAnimInstance* AnimInstance = Player->GetMesh1P()->GetAnimInstance();
+			if (AnimInstance != nullptr)
+			{
+				AnimInstance->Montage_Play(FireAnimation, 1.f);
+			}
+		}
+		else
+		{
+			UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+			if (AnimInstance != nullptr)
+			{
+				AnimInstance->Montage_Play(FireAnimation, 1.f);
+			}
+		}
+		
+	}
 
 	if (FireSound != nullptr)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 	}
+	bCanAttack = false;
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AWeaponBase::ResetAttack, AttackRate);
 }
 
 void AWeaponBase::SetUser(ACharacterBase* User)
@@ -62,4 +86,9 @@ void AWeaponBase::SetUser(ACharacterBase* User)
 	{
 		Character->OnFire.AddDynamic(this, &AWeaponBase::Fire);
 	}
+}
+
+void AWeaponBase::ResetAttack()
+{
+	bCanAttack = true;
 }

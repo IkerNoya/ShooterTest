@@ -25,8 +25,17 @@ protected:
 	TSubclassOf<class AShooterTestProjectile> ProjectileClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Settings")
 	USoundBase* FireSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UAnimMontage* FireAnimation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Settings")
 	FVector GunOffset;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float AttackRate = .25f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	bool bCanAttack = true;
+
+private:
+	FTimerHandle AttackTimer;
 		
 public:
 	AWeaponBase();
@@ -40,4 +49,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void SetUser(ACharacterBase* User);
+
+	void ResetAttack();
 };

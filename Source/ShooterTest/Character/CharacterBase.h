@@ -25,23 +25,15 @@ class ACharacterBase : public ACharacter
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
-	USkeletalMeshComponent* Mesh1P;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-	TSubclassOf<AWeaponBase> WeaponClass;
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	AWeaponBase* FP_Gun;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FirstPersonCameraComponent;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	bool bCanAttack = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UHealthComponent* HealthComponent;
+
 public:
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnFire OnFire;
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnAltFire OnAltFire;
 	
 	ACharacterBase();
@@ -58,8 +50,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	UAnimMontage* FireAnimation;
+
 
 protected:
 	
@@ -78,13 +69,18 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	void Die();
 	
 public:
-	UFUNCTION(BlueprintCallable)
-	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
-	UFUNCTION(BlueprintCallable)
-	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	
 	UFUNCTION(BlueprintCallable)
 	float GetHealth() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void Attack();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void AltAttack();
 };
 

@@ -25,6 +25,8 @@ protected:
 	UHealthComponent* HealthComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	bool bCanAttack = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	int32 ScoreToAdd = 10.f;
 
 public:
 	ADroneBase();

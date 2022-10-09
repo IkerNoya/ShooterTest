@@ -18,36 +18,17 @@ ACharacterBase::ACharacterBase()
 
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
-
-	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->SetRelativeLocation(FVector(-39.56f, 1.75f, 64.f)); // Position the camera
-	FirstPersonCameraComponent->bUsePawnControlRotation = true;
-
-	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
-	Mesh1P->SetOnlyOwnerSee(true);
-	Mesh1P->SetupAttachment(FirstPersonCameraComponent);
-	Mesh1P->bCastDynamicShadow = false;
-	Mesh1P->CastShadow = false;
-	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
-	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
-
+	
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
 }
 
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FP_Gun = GetWorld()->SpawnActor<AWeaponBase>(WeaponClass);
-	
-	Mesh1P->SetHiddenInGame(false, true);
-	
-	if(!FP_Gun) return;
-	
-	FP_Gun->SetUser(this);
-	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),
-							  TEXT("GripPoint"));
+	if(HealthComponent)
+	{
+		HealthComponent->OnDeath.AddDynamic(this, &ACharacterBase::Die);
+	}
 }
 
 void ACharacterBase::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -78,34 +59,32 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
+void ACharacterBase::Die_Implementation()
+{
+
+}
+
 float ACharacterBase::GetHealth() const
 {
 	return HealthComponent ? HealthComponent->GetHealth() : 0.f;
 }
 
+void ACharacterBase::AltAttack_Implementation()
+{
+}
+
+void ACharacterBase::Attack_Implementation()
+{
+}
+
 void ACharacterBase::Fire()
 {
-	if(OnFire.IsBound())
-	{
-		OnFire.Broadcast();
-	}
-
-	if (FireAnimation != nullptr)
-	{
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != nullptr)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
-	}
+	Attack();
 }
 
 void ACharacterBase::AltFire()
 {
-	if(OnAltFire.IsBound())
-	{
-		OnAltFire.Broadcast();
-	}
+	AltAttack();
 }
 
 void ACharacterBase::MoveForward(float Value)
