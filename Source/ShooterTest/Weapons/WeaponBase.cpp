@@ -32,6 +32,8 @@ void AWeaponBase::BeginPlay()
 void AWeaponBase::Fire()
 {
 	if(!bCanAttack) return;
+
+	OnWeaponFire.Broadcast();
 	
 	if (ProjectileClass != nullptr)
 	{

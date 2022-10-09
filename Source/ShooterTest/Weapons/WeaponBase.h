@@ -8,6 +8,7 @@
 #include "ShooterTest/Character/CharacterBase.h"
 #include "WeaponBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponFire);
 UCLASS()
 class SHOOTERTEST_API AWeaponBase : public AActor
 {
@@ -38,6 +39,9 @@ private:
 	FTimerHandle AttackTimer;
 		
 public:
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnWeaponFire OnWeaponFire;
+	
 	AWeaponBase();
 	
 protected:
