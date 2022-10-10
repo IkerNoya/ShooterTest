@@ -32,6 +32,13 @@ AShooterTestProjectile::AShooterTestProjectile()
 	InitialLifeSpan = 3.0f;
 }
 
+void AShooterTestProjectile::Initialize(float DamageValue, float Speed)
+{
+	Damage = DamageValue;
+	ProjectileMovement->InitialSpeed = Speed;
+	ProjectileMovement->MaxSpeed = Speed;
+}
+
 void AShooterTestProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	if ((OtherActor != nullptr) && (OtherActor != this) && OtherActor!=GetInstigator())

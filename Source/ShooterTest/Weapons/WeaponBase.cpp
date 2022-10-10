@@ -49,7 +49,9 @@ void AWeaponBase::Fire()
 			ActorSpawnParams.SpawnCollisionHandlingOverride =
 				ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 			ActorSpawnParams.Instigator = Character;
-			World->SpawnActor<AShooterTestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			AShooterTestProjectile* Projectile = World->SpawnActor<AShooterTestProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+			if(!Projectile) return;
+			Projectile->Initialize(Damage, ProjectileSpeed);
 		}
 	}
 	if (FireAnimation != nullptr)

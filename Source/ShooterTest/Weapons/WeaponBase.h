@@ -31,6 +31,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Settings")
 	FVector GunOffset;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float Damage = 20.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float ProjectileSpeed = 5000.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	float AttackRate = .25f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	bool bCanAttack = true;
@@ -55,4 +59,9 @@ public:
 	void SetUser(ACharacterBase* User);
 
 	void ResetAttack();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FORCEINLINE float GetDamage() const {return Damage;} 
+	UFUNCTION(BlueprintCallable)
+	void SetDamage(float Value) { Damage = Value; }
 };

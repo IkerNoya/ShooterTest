@@ -4,6 +4,7 @@
 #include "DroneBase.h"
 
 #include "GameFramework/PawnMovementComponent.h"
+#include "ShooterTest/Core/GameMode/ShooterGameMode.h"
 
 
 ADroneBase::ADroneBase()
@@ -17,8 +18,24 @@ ADroneBase::ADroneBase()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
 }
 
+void ADroneBase::BeginPlay()
+{
+	Super::BeginPlay();
+	if(!HealthComponent) return;
+
+	HealthComponent->OnDeath.AddDynamic(this, &ADroneBase::Die);
+}
+
+void ADroneBase::Die_Implementation()
+{
+	if(auto* GameMode = Cast<AShooterGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		GameMode->AddScore(ScoreToAdd);
+	}
+}
+
 float ADroneBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
+                             AActor* DamageCauser)
 {
 	if(HealthComponent)
 	{

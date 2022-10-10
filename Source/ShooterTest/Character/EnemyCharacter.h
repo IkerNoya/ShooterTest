@@ -18,4 +18,6 @@ protected:
 	int32 ScoreToAdd = 20.f;
 
 	virtual void Die_Implementation() override;
+
+	virtual void Attack_Implementation() override;
 };
