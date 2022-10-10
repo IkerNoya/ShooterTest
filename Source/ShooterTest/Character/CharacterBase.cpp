@@ -61,7 +61,12 @@ float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 
 void ACharacterBase::Die_Implementation()
 {
-
+	if(!GetMesh()) return;
+	
+	GetMesh()->SetAllBodiesSimulatePhysics(true);
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->WakeAllRigidBodies();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 float ACharacterBase::GetHealth() const
@@ -79,16 +84,22 @@ void ACharacterBase::Attack_Implementation()
 
 void ACharacterBase::Fire()
 {
+	if(!HealthComponent || HealthComponent->IsDead()) return;
+	
 	Attack();
 }
 
 void ACharacterBase::AltFire()
 {
+	if(!HealthComponent || HealthComponent->IsDead()) return;
+	
 	AltAttack();
 }
 
 void ACharacterBase::MoveForward(float Value)
 {
+	if(!HealthComponent || HealthComponent->IsDead()) return;
+
 	if (Value != 0.0f)
 	{
 		AddMovementInput(GetActorForwardVector(), Value);
@@ -97,6 +108,8 @@ void ACharacterBase::MoveForward(float Value)
 
 void ACharacterBase::MoveRight(float Value)
 {
+	if(!HealthComponent || HealthComponent->IsDead()) return;
+
 	if (Value != 0.0f)
 	{
 		AddMovementInput(GetActorRightVector(), Value);

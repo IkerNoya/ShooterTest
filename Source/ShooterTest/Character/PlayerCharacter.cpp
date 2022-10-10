@@ -9,6 +9,7 @@
 
 APlayerCharacter::APlayerCharacter()
 {
+	GetMesh()->SetOwnerNoSee(true);
 	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
@@ -60,4 +61,8 @@ void APlayerCharacter::AltAttack_Implementation()
 void APlayerCharacter::Die_Implementation()
 {
 	Super::Die_Implementation();
+	GetMesh()->SetOwnerNoSee(false);
+	Mesh1P->SetOnlyOwnerSee(false);
+	Mesh1P->SetOwnerNoSee(true);
+	FP_Gun->Destroy();
 }

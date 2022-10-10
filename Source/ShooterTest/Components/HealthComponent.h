@@ -47,4 +47,6 @@ public:
 	FORCEINLINE float GetHealth() const { return CurrentHealth; }
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Health")
 	FORCEINLINE float GetNormalizedHealth() const { return CurrentHealth / 100.f; };
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Health")
+	FORCEINLINE bool IsDead() const {return CurrentHealth <= 0;}
 };
