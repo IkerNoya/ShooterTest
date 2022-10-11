@@ -83,12 +83,17 @@ void AWeaponBase::Fire()
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AWeaponBase::ResetAttack, AttackRate);
 }
 
+void AWeaponBase::AltFire()
+{
+}
+
 void AWeaponBase::SetUser(ACharacterBase* User)
 {
 	Character = User;
 	if(Character)
 	{
 		Character->OnFire.AddDynamic(this, &AWeaponBase::Fire);
+		Character->OnAltFire.AddDynamic(this, &AWeaponBase::AltFire);
 	}
 }
 

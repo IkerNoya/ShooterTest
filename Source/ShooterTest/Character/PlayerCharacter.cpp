@@ -43,19 +43,11 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Attack_Implementation()
 {
 	Super::Attack_Implementation();
-	if(OnFire.IsBound())
-	{
-		OnFire.Broadcast();
-	}
 }
 
 void APlayerCharacter::AltAttack_Implementation()
 {
 	Super::AltAttack_Implementation();
-	if(OnAltFire.IsBound())
-	{
-		OnAltFire.Broadcast();
-	}
 }
 
 void APlayerCharacter::Die_Implementation()

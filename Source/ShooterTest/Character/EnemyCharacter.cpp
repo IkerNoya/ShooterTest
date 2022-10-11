@@ -18,6 +18,4 @@ void AEnemyCharacter::Die_Implementation()
 void AEnemyCharacter::Attack_Implementation()
 {
 	Super::Attack_Implementation();
-	if(!bCanAttack) return;
-	OnFire.Broadcast();
 }

@@ -40,6 +40,8 @@ void ACharacterBase::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ACharacterBase::Fire);
 
+	PlayerInputComponent->BindAction("AltFire", IE_Pressed, this, &ACharacterBase::AltFire);
+	
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACharacterBase::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACharacterBase::MoveRight);
 
@@ -76,10 +78,20 @@ float ACharacterBase::GetHealth() const
 
 void ACharacterBase::AltAttack_Implementation()
 {
+	if(!bCanAttack) return;
+	if(OnAltFire.IsBound())
+	{
+		OnAltFire.Broadcast();
+	}
 }
 
 void ACharacterBase::Attack_Implementation()
 {
+	if(!bCanAttack) return;
+	if(OnFire.IsBound())
+	{
+		OnFire.Broadcast();
+	}
 }
 
 void ACharacterBase::Fire()

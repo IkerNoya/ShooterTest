@@ -54,7 +54,9 @@ protected:
 public:
 	UFUNCTION()
 	void Fire();
-
+	UFUNCTION()
+	void AltFire();
+	
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void SetUser(ACharacterBase* User);
 
