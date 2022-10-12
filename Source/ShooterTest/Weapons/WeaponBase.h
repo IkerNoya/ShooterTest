@@ -24,29 +24,53 @@ protected:
 	USceneComponent* FP_MuzzleLocation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = "Weapon|Settings")
 	TSubclassOf<class AShooterTestProjectile> ProjectileClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = "Weapon|Settings")
+	TSubclassOf<class AShooterTestProjectile> AltAttackProjectileClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Settings")
 	USoundBase* FireSound;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Settings")
+	USoundBase* AltFireSound;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	UAnimMontage* FireAnimation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UAnimMontage* AltFireAnimation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Settings")
 	FVector GunOffset;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Attack")
 	float Damage = 20.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|AltAttack")
+	float AltAttackDamage = 10.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Attack")
 	float ProjectileSpeed = 5000.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|AltAttack")
+	float AltAttackProjectileSpeed = 5000.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Attack")
 	float AttackRate = .25f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|AltAttack")
+	float AltAttackCooldown = .5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|AltAttack")
+	int32 AltAttackTotalProjectiles = 6;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|AltAttack", meta=(ClampMin = 0.0, ClampMax = 0.25))
+	float AltFireSpreadExponent = .1f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	bool bCanAttack = true;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	bool bCanDoAltAttack = true;
 
 private:
-	FTimerHandle AttackTimer;
+	FTimerHandle AttackTimerHandle;
+	FTimerHandle AltAttackTimerHandle;
 		
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnWeaponFire OnWeaponFire;
 	
 	AWeaponBase();
+
+private:
+	void PlayAnimation(UAnimMontage* Animation);
+	void PlaySound(USoundBase* Sound);
+	FRotator CalculateSpread(FVector Direction, float MaxAngle) const;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -60,8 +84,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void SetUser(ACharacterBase* User);
 
+	UFUNCTION()
 	void ResetAttack();
-
+	UFUNCTION()
+	void ResetAltAttack();
+	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FORCEINLINE float GetDamage() const {return Damage;} 
 	UFUNCTION(BlueprintCallable)

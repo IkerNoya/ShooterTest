@@ -23,6 +23,44 @@ AWeaponBase::AWeaponBase()
 	GunOffset = FVector(100.0f, 0.0f, 10.0f);
 }
 
+void AWeaponBase::PlayAnimation(UAnimMontage* Animation)
+{
+	if (Animation)
+	{
+		if(auto* Player = Cast<APlayerCharacter>(Character))
+		{
+			UAnimInstance* AnimInstance = Player->GetMesh1P()->GetAnimInstance();
+			if (AnimInstance != nullptr)
+			{
+				AnimInstance->Montage_Play(Animation, 1.f);
+			}
+		}
+		else
+		{
+			UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+			if (AnimInstance != nullptr)
+			{
+				AnimInstance->Montage_Play(Animation, 1.f);
+			}
+		}
+		
+	}
+
+}
+
+void AWeaponBase::PlaySound(USoundBase* Sound)
+{
+	if (FireSound != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, Sound, GetActorLocation());
+	}
+}
+
+FRotator AWeaponBase::CalculateSpread(FVector Direction, float MaxAngle) const
+{
+	return FRotationMatrix::MakeFromX(FMath::VRandCone(Direction, MaxAngle)).Rotator();
+}
+
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
@@ -54,37 +92,54 @@ void AWeaponBase::Fire()
 			Projectile->Initialize(Damage, ProjectileSpeed);
 		}
 	}
-	if (FireAnimation != nullptr)
-	{
-		if(auto* Player = Cast<APlayerCharacter>(Character))
-		{
-			UAnimInstance* AnimInstance = Player->GetMesh1P()->GetAnimInstance();
-			if (AnimInstance != nullptr)
-			{
-				AnimInstance->Montage_Play(FireAnimation, 1.f);
-			}
-		}
-		else
-		{
-			UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
-			if (AnimInstance != nullptr)
-			{
-				AnimInstance->Montage_Play(FireAnimation, 1.f);
-			}
-		}
-		
-	}
 
-	if (FireSound != nullptr)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
+	PlayAnimation(FireAnimation);
+	
+	PlaySound(FireSound);
+	
 	bCanAttack = false;
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AWeaponBase::ResetAttack, AttackRate);
+	bCanDoAltAttack = false;
+	GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, this, &AWeaponBase::ResetAttack, AttackRate);
+	GetWorld()->GetTimerManager().SetTimer(AltAttackTimerHandle, this, &AWeaponBase::ResetAltAttack, AttackRate);
+
 }
 
 void AWeaponBase::AltFire()
 {
+	if(!bCanDoAltAttack	) return;
+	if (AltAttackProjectileClass != nullptr)
+	{
+		UWorld* const World = GetWorld();
+		if (World != nullptr)
+		{
+			for (int i = 0; i < AltAttackTotalProjectiles; i++)
+			{
+				const FRotator SpawnRotation = CalculateSpread(Character->GetControlRotation().Vector(), AltFireSpreadExponent);
+				const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr)
+					                               ? FP_MuzzleLocation->GetComponentLocation()
+					                               : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+
+				FActorSpawnParameters ActorSpawnParams;
+				ActorSpawnParams.SpawnCollisionHandlingOverride =
+					ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+				ActorSpawnParams.Instigator = Character;
+				AShooterTestProjectile* Projectile = World->SpawnActor<AShooterTestProjectile>(
+					AltAttackProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
+				if (!Projectile) return;
+				Projectile->Initialize(AltAttackDamage, AltAttackProjectileSpeed);
+			}
+		}
+	}
+
+	PlayAnimation(AltFireAnimation);
+	
+	PlaySound(AltFireSound);
+	
+	bCanAttack = false;
+	bCanDoAltAttack = false;
+	GetWorld()->GetTimerManager().SetTimer(AltAttackTimerHandle, this, &AWeaponBase::ResetAltAttack, AltAttackCooldown);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimerHandle, this, &AWeaponBase::ResetAttack, AttackRate);
+	
 }
 
 void AWeaponBase::SetUser(ACharacterBase* User)
@@ -100,4 +155,9 @@ void AWeaponBase::SetUser(ACharacterBase* User)
 void AWeaponBase::ResetAttack()
 {
 	bCanAttack = true;
+}
+
+void AWeaponBase::ResetAltAttack()
+{
+	bCanDoAltAttack=true;
 }
