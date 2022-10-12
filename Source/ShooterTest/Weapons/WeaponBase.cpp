@@ -92,6 +92,11 @@ void AWeaponBase::Fire()
 			Projectile->Initialize(Damage, ProjectileSpeed);
 		}
 	}
+	
+	if(AttackShake)
+	{
+		UGameplayStatics::PlayWorldCameraShake(GetWorld(), AttackShake, GetActorLocation(), 0.f, 500.f);
+	}
 
 	PlayAnimation(FireAnimation);
 	
@@ -129,6 +134,11 @@ void AWeaponBase::AltFire()
 				Projectile->Initialize(AltAttackDamage, AltAttackProjectileSpeed);
 			}
 		}
+	}
+
+	if(AltAttackShake)
+	{
+		UGameplayStatics::PlayWorldCameraShake(GetWorld(), AltAttackShake, GetActorLocation(), 0.f, 500.f);
 	}
 
 	PlayAnimation(AltFireAnimation);

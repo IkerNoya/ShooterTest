@@ -52,6 +52,10 @@ protected:
 	int32 AltAttackTotalProjectiles = 6;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|AltAttack", meta=(ClampMin = 0.0, ClampMax = 0.25))
 	float AltFireSpreadExponent = .1f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|Attack")
+	TSubclassOf<UCameraShakeBase> AttackShake;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon|AltAttack")
+	TSubclassOf<UCameraShakeBase> AltAttackShake;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	bool bCanAttack = true;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Gameplay")
