@@ -74,6 +74,7 @@ public:
 private:
 	void PlayAnimation(UAnimMontage* Animation);
 	void PlaySound(USoundBase* Sound);
+	void PlayCameraShake(TSubclassOf<UCameraShakeBase> Shake);
 	FRotator CalculateSpread(FVector Direction, float MaxAngle) const;
 	
 protected:

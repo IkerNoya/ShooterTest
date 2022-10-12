@@ -56,6 +56,14 @@ void AWeaponBase::PlaySound(USoundBase* Sound)
 	}
 }
 
+void AWeaponBase::PlayCameraShake(TSubclassOf<UCameraShakeBase> Shake)
+{
+	if(Shake)
+	{
+		UGameplayStatics::PlayWorldCameraShake(GetWorld(), Shake, GetActorLocation(), 0.f, 500.f);
+	}
+}
+
 FRotator AWeaponBase::CalculateSpread(FVector Direction, float MaxAngle) const
 {
 	return FRotationMatrix::MakeFromX(FMath::VRandCone(Direction, MaxAngle)).Rotator();
@@ -93,10 +101,7 @@ void AWeaponBase::Fire()
 		}
 	}
 	
-	if(AttackShake)
-	{
-		UGameplayStatics::PlayWorldCameraShake(GetWorld(), AttackShake, GetActorLocation(), 0.f, 500.f);
-	}
+	PlayCameraShake(AttackShake);
 
 	PlayAnimation(FireAnimation);
 	
@@ -136,10 +141,7 @@ void AWeaponBase::AltFire()
 		}
 	}
 
-	if(AltAttackShake)
-	{
-		UGameplayStatics::PlayWorldCameraShake(GetWorld(), AltAttackShake, GetActorLocation(), 0.f, 500.f);
-	}
+	PlayCameraShake(AltAttackShake);
 
 	PlayAnimation(AltFireAnimation);
 	

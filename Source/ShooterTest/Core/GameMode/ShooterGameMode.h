@@ -14,6 +14,8 @@ class SHOOTERTEST_API AShooterGameMode : public AGameModeBase
 	GENERATED_BODY()
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	TArray<AActor*> Enemies;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	int32 Score = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	float EndGameTimer = 1.f;
@@ -31,9 +33,17 @@ private:
 
 	UFUNCTION()
 	void SendLooseEvent();
+	UFUNCTION()
+	void SendWinEvent();
+
+protected:
+	virtual void BeginPlay() override;
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	void AddScore(int32 Amount);
+	UFUNCTION(BlueprintCallable)
+	void RemoveEnemyFromArray(AActor* Enemy);
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FORCEINLINE int32 GetScore() const { return Score; }
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)

@@ -11,6 +11,7 @@ void AEnemyCharacter::Die_Implementation()
 	Super::Die_Implementation();
 	if(auto* GameMode = Cast<AShooterGameMode>(GetWorld()->GetAuthGameMode()))
 	{
+		GameMode->RemoveEnemyFromArray(this);
 		GameMode->AddScore(ScoreToAdd);
 	}
 }
