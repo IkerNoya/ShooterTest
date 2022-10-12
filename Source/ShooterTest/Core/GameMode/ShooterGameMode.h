@@ -15,6 +15,10 @@ class SHOOTERTEST_API AShooterGameMode : public AGameModeBase
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	int32 Score = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float EndGameTimer = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	float TimeDilationValue = .5f;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnScoreChanged OnScoreChanged;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
@@ -22,6 +26,11 @@ protected:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnGameEnd OnWin;
 
+private:
+	FTimerHandle TimeToEndGameHandle;
+
+	UFUNCTION()
+	void SendLooseEvent();
 public:
 	UFUNCTION(BlueprintCallable)
 	void AddScore(int32 Amount);

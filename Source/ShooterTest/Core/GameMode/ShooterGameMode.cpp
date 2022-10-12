@@ -3,6 +3,13 @@
 
 #include "ShooterGameMode.h"
 
+#include "Kismet/GameplayStatics.h"
+
+
+void AShooterGameMode::SendLooseEvent()
+{
+	OnLoose.Broadcast();
+}
 
 void AShooterGameMode::AddScore(int32 Amount)
 {
@@ -12,7 +19,8 @@ void AShooterGameMode::AddScore(int32 Amount)
 
 void AShooterGameMode::Loose_Implementation()
 {
-	OnLoose.Broadcast();
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), TimeDilationValue);
+	GetWorld()->GetTimerManager().SetTimer(TimeToEndGameHandle, this, &AShooterGameMode::SendLooseEvent, EndGameTimer);
 }
 
 void AShooterGameMode::Win_Implementation()
