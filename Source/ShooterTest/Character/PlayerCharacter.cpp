@@ -5,6 +5,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "ShooterTest/Core/GameMode/ShooterGameMode.h"
 #include "ShooterTest/Weapons/WeaponBase.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -57,4 +58,8 @@ void APlayerCharacter::Die_Implementation()
 	Mesh1P->SetOnlyOwnerSee(false);
 	Mesh1P->SetOwnerNoSee(true);
 	FP_Gun->Destroy();
+	if(auto* GameMode = Cast<AShooterGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		GameMode->Loose();
+	}
 }

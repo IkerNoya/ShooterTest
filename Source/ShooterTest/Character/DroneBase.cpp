@@ -4,6 +4,7 @@
 #include "DroneBase.h"
 
 #include "GameFramework/PawnMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "ShooterTest/Core/GameMode/ShooterGameMode.h"
 
 
@@ -46,4 +47,8 @@ float ADroneBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 
 void ADroneBase::Attack_Implementation()
 {
+	if(AttackSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), AttackSound, GetActorLocation());
+	}
 }

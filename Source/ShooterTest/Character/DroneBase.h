@@ -27,7 +27,8 @@ protected:
 	bool bCanAttack = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
 	int32 ScoreToAdd = 10.f;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	USoundBase* AttackSound;
 public:
 	ADroneBase();
 
